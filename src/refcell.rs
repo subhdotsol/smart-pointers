@@ -97,3 +97,21 @@ impl<T> Drop for RefMut<'_, T> {
         }
     }
 }
+
+#[cfg(test)]
+mod test {
+    use super::RefCell;
+
+    #[test]
+    fn refcell_basic() {
+        let rc = RefCell::new(42);
+        assert_eq!(*rc.borrow().unwrap(), 42);
+        
+        {
+            let mut b = rc.borrow_mut().unwrap();
+            *b = 43;
+        }
+        
+        assert_eq!(*rc.borrow().unwrap(), 43);
+    }
+}
