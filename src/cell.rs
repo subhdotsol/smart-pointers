@@ -40,4 +40,18 @@ mod test {
         c.set(43);
         assert_eq!(c.get(), 43);
     }
+
+    /* 
+    // FAILING TEST: Cell<T> is !Sync because it contains UnsafeCell<T>.
+    // This should not compile if uncommented.
+    #[test]
+    fn cell_sync_fail() {
+        use std::sync::Arc;
+        let x = Arc::new(Cell::new(42));
+        let x1 = Arc::clone(&x);
+        std::thread::spawn(move || {
+            x1.set(43);
+        });
+    }
+    */
 }
