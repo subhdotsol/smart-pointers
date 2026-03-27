@@ -1,3 +1,4 @@
+//! A simple implementation of Cell
 use std::cell::UnsafeCell;
 
 pub struct Cell<T> {
