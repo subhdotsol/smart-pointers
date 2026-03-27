@@ -35,3 +35,15 @@ impl<T> std::ops::Deref for Rc<T> {
         &unsafe { self.inner.as_ref() }.value
     }
 }
+
+impl<T> Clone for Rc<T> {
+    fn clone(&self) -> Self {
+        let inner = unsafe { self.inner.as_ref() };
+        let c = inner.refcount.get();
+        inner.refcount.set(c + 1);
+        Rc {
+            inner: self.inner,
+            _marker: PhantomData,
+        }
+    }
+}
