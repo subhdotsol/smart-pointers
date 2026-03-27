@@ -56,6 +56,20 @@ impl<T> std::ops::Deref for Ref<'_, T> {
     }
 }
 
+impl<T> Drop for Ref<'_, T> {
+    fn drop(&mut self) {
+        match self.refcell.state.get() {
+            RefState::Exclusive | RefState::Unshared => unreachable!(),
+            RefState::Shared(1) => {
+                self.refcell.state.set(RefState::Unshared);
+            }
+            RefState::Shared(n) => {
+                self.refcell.state.set(RefState::Shared(n - 1));
+            }
+        }
+    }
+}
+
 pub struct RefMut<'refcell, T> {
     refcell: &'refcell RefCell<T>,
 }
