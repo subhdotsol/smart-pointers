@@ -86,3 +86,14 @@ impl<T> std::ops::DerefMut for RefMut<'_, T> {
         unsafe { &mut *self.refcell.value.get() }
     }
 }
+
+impl<T> Drop for RefMut<'_, T> {
+    fn drop(&mut self) {
+        match self.refcell.state.get() {
+            RefState::Shared(_) | RefState::Unshared => unreachable!(),
+            RefState::Exclusive => {
+                self.refcell.state.set(RefState::Unshared);
+            }
+        }
+    }
+}
