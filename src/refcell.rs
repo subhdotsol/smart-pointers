@@ -49,6 +49,13 @@ pub struct Ref<'refcell, T> {
     refcell: &'refcell RefCell<T>,
 }
 
+impl<T> std::ops::Deref for Ref<'_, T> {
+    type Target = T;
+    fn deref(&self) -> &Self::Target {
+        unsafe { &*self.refcell.value.get() }
+    }
+}
+
 pub struct RefMut<'refcell, T> {
     refcell: &'refcell RefCell<T>,
 }
