@@ -34,8 +34,21 @@ impl<T> RefCell<T> {
             RefState::Exclusive => None,
         }
     }
+
+    pub fn borrow_mut(&self) -> Option<RefMut<'_, T>> {
+        if let RefState::Unshared = self.state.get() {
+            self.state.set(RefState::Exclusive);
+            Some(RefMut { refcell: self })
+        } else {
+            None
+        }
+    }
 }
 
 pub struct Ref<'refcell, T> {
+    refcell: &'refcell RefCell<T>,
+}
+
+pub struct RefMut<'refcell, T> {
     refcell: &'refcell RefCell<T>,
 }
