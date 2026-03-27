@@ -1,3 +1,4 @@
+//! A simple implementation of Rc
 use crate::cell::Cell;
 use std::marker::PhantomData;
 use std::ptr::NonNull;
