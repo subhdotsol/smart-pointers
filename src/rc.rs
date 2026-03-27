@@ -79,4 +79,12 @@ mod tests {
         let rc2 = rc1.clone();
         assert_eq!(*rc1, *rc2);
     }
+
+    #[test]
+    fn test_rc_drop() {
+        let rc1 = Rc::new(5);
+        let rc2 = rc1.clone();
+        drop(rc1);
+        drop(rc2);
+    }
 }
