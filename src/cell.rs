@@ -54,4 +54,17 @@ mod test {
         });
     }
     */
+
+    /*
+    // FAILING TEST: Cell doesn'\''t let you get references to its interior.
+    // This is because set() could invalidate them.
+    #[test]
+    fn cell_reference_fail() {
+        let x = Cell::new(vec![42]);
+        // This wouldn'\''t even compile because Cell::get returns a Copy of the value,
+        // and Vec is not Copy. If we had a way to get a reference:
+        // let first = &x.get_ref()[0]; 
+        // x.set(vec![]); // This would make '\''first'\'' a dangling pointer.
+    }
+    */
 }
