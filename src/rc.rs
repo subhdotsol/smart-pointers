@@ -64,3 +64,13 @@ impl<T> Drop for Rc<T> {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::Rc;
+
+    #[test]
+    fn test_rc_new() {
+        let _rc = Rc::new(5);
+    }
+}
