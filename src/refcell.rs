@@ -131,3 +131,14 @@ mod test {
         assert!(rc.borrow_mut().is_none());
     }
 }
+
+    /*
+    // FAILING TEST: Multiple borrow_mut() calls.
+    // This will return None, failing the unwrap().
+    #[test]
+    fn refcell_multiple_borrow_mut_fail() {
+        let rc = RefCell::new(42);
+        let _bm1 = rc.borrow_mut().unwrap();
+        let _bm2 = rc.borrow_mut().unwrap(); // This will panic if unwrapped.
+    }
+    */
