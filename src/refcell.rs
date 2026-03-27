@@ -123,4 +123,11 @@ mod test {
         assert_eq!(*b1, 42);
         assert_eq!(*b2, 42);
     }
+
+    #[test]
+    fn refcell_exclusive_rule() {
+        let rc = RefCell::new(42);
+        let _b1 = rc.borrow().unwrap();
+        assert!(rc.borrow_mut().is_none());
+    }
 }
