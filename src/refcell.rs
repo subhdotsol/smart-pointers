@@ -73,3 +73,10 @@ impl<T> Drop for Ref<'_, T> {
 pub struct RefMut<'refcell, T> {
     refcell: &'refcell RefCell<T>,
 }
+
+impl<T> std::ops::Deref for RefMut<'_, T> {
+    type Target = T;
+    fn deref(&self) -> &Self::Target {
+        unsafe { &*self.refcell.value.get() }
+    }
+}
