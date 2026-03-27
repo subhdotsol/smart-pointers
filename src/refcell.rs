@@ -114,4 +114,13 @@ mod test {
         
         assert_eq!(*rc.borrow().unwrap(), 43);
     }
+
+    #[test]
+    fn refcell_multiple_borrow() {
+        let rc = RefCell::new(42);
+        let b1 = rc.borrow().unwrap();
+        let b2 = rc.borrow().unwrap();
+        assert_eq!(*b1, 42);
+        assert_eq!(*b2, 42);
+    }
 }
