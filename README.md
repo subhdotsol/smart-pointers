@@ -1,4 +1,4 @@
-# Waste-2: Smart Pointers and Interior Mutability
+# Smart Pointers and Interior Mutability
 
 This repository contains educational implementations of Rust smart pointers and interior mutability primitives, following the concepts from Jon Gjengset's **Crust of Rust** series.
 
