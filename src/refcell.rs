@@ -1,3 +1,4 @@
+//! A simple implementation of RefCell
 use crate::cell::Cell;
 use std::cell::UnsafeCell;
 
