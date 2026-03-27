@@ -80,3 +80,9 @@ impl<T> std::ops::Deref for RefMut<'_, T> {
         unsafe { &*self.refcell.value.get() }
     }
 }
+
+impl<T> std::ops::DerefMut for RefMut<'_, T> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        unsafe { &mut *self.refcell.value.get() }
+    }
+}
