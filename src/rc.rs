@@ -26,3 +26,12 @@ impl<T> Rc<T> {
         }
     }
 }
+
+impl<T> std::ops::Deref for Rc<T> {
+    type Target = T;
+    fn deref(&self) -> &Self::Target {
+        // SAFETY: self.inner is a Box that is only deallocated when the last Rc goes away.
+        // we have an Rc, therefore the Box has not been deallocated, so deref is fine.
+        &unsafe { self.inner.as_ref() }.value
+    }
+}
