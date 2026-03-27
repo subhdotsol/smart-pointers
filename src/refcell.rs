@@ -142,3 +142,14 @@ mod test {
         let _bm2 = rc.borrow_mut().unwrap(); // This will panic if unwrapped.
     }
     */
+
+    /*
+    // FAILING TEST: borrow_mut() while borrow() is active.
+    // This will return None, failing the unwrap().
+    #[test]
+    fn refcell_borrow_mut_while_shared_fail() {
+        let rc = RefCell::new(42);
+        let _b1 = rc.borrow().unwrap();
+        let _bm1 = rc.borrow_mut().unwrap(); // This will panic if unwrapped.
+    }
+    */
