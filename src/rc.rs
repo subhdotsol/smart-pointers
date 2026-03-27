@@ -54,12 +54,11 @@ impl<T> Drop for Rc<T> {
         let inner = unsafe { self.inner.as_ref() };
         let c = inner.refcount.get();
         if c == 1 {
-            drop(inner);
             // SAFETY: we are the _only_ Rc left, and we are being dropped.
-            // therefore, after us, there will be no Rc'\''s, and no references to T.
+            // therefore, after us, there will be no Rc's, and no references to T.
             let _ = unsafe { Box::from_raw(self.inner.as_ptr()) };
         } else {
-            // there are other Rcs, so don'\''t drop the Box!
+            // there are other Rcs, so don't drop the Box!
             inner.refcount.set(c - 1);
         }
     }
@@ -72,5 +71,12 @@ mod tests {
     #[test]
     fn test_rc_new() {
         let _rc = Rc::new(5);
+    }
+
+    #[test]
+    fn test_rc_clone() {
+        let rc1 = Rc::new(5);
+        let rc2 = rc1.clone();
+        assert_eq!(*rc1, *rc2);
     }
 }
