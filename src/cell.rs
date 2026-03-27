@@ -28,3 +28,16 @@ impl<T> Cell<T> {
         unsafe { *self.value.get() }
     }
 }
+
+#[cfg(test)]
+mod test {
+    use super::Cell;
+
+    #[test]
+    fn cell_basic() {
+        let c = Cell::new(42);
+        assert_eq!(c.get(), 42);
+        c.set(43);
+        assert_eq!(c.get(), 43);
+    }
+}
