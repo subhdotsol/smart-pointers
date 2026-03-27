@@ -20,4 +20,22 @@ impl<T> RefCell<T> {
             state: Cell::new(RefState::Unshared),
         }
     }
+
+    pub fn borrow(&self) -> Option<Ref<'_, T>> {
+        match self.state.get() {
+            RefState::Unshared => {
+                self.state.set(RefState::Shared(1));
+                Some(Ref { refcell: self })
+            }
+            RefState::Shared(n) => {
+                self.state.set(RefState::Shared(n + 1));
+                Some(Ref { refcell: self })
+            }
+            RefState::Exclusive => None,
+        }
+    }
+}
+
+pub struct Ref<'refcell, T> {
+    refcell: &'refcell RefCell<T>,
 }
