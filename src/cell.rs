@@ -18,4 +18,13 @@ impl<T> Cell<T> {
             *self.value.get() = value;
         }
     }
+
+    pub fn get(&self) -> T
+    where
+        T: Copy,
+    {
+        // SAFETY: we know no one else is modifying this value since only this thread can mutate
+        // because !Sync and it is the thread executing this function.
+        unsafe { *self.value.get() }
+    }
 }
