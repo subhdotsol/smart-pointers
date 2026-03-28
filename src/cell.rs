@@ -42,7 +42,7 @@ mod test {
         assert_eq!(c.get(), 43);
     }
 
-    /* 
+    /*
     // FAILING TEST: Cell<T> is !Sync because it contains UnsafeCell<T>.
     // This should not compile if uncommented.
     #[test]
@@ -64,8 +64,39 @@ mod test {
         let x = Cell::new(vec![42]);
         // This wouldn'\''t even compile because Cell::get returns a Copy of the value,
         // and Vec is not Copy. If we had a way to get a reference:
-        // let first = &x.get_ref()[0]; 
+        // let first = &x.get_ref()[0];
         // x.set(vec![]); // This would make '\''first'\'' a dangling pointer.
     }
     */
 }
+
+// Example :
+// struct Counter {
+//     value: Cell<i32>,
+// }
+
+// impl Counter {
+//     fn new() -> Self {
+//         Counter {
+//             value: Cell::new(0),
+//         }
+//     }
+
+//     fn increment(&self) {
+//         let v = self.value.get();
+//         self.value.set(v + 1);
+//     }
+
+//     fn get(&self) -> i32 {
+//         self.value.get()
+//     }
+// }
+
+// fn main() {
+//     let counter = Counter::new();
+
+//     counter.increment();
+//     counter.increment();
+
+//     println!("{}", counter.get()); // 2
+// }
