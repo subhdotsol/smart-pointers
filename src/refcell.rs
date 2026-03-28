@@ -107,12 +107,12 @@ mod test {
     fn refcell_basic() {
         let rc = RefCell::new(42);
         assert_eq!(*rc.borrow().unwrap(), 42);
-        
+
         {
             let mut b = rc.borrow_mut().unwrap();
             *b = 43;
         }
-        
+
         assert_eq!(*rc.borrow().unwrap(), 43);
     }
 
@@ -133,24 +133,123 @@ mod test {
     }
 }
 
-    /*
-    // FAILING TEST: Multiple borrow_mut() calls.
-    // This will return None, failing the unwrap().
-    #[test]
-    fn refcell_multiple_borrow_mut_fail() {
-        let rc = RefCell::new(42);
-        let _bm1 = rc.borrow_mut().unwrap();
-        let _bm2 = rc.borrow_mut().unwrap(); // This will panic if unwrapped.
-    }
-    */
+/*
+// FAILING TEST: Multiple borrow_mut() calls.
+// This will return None, failing the unwrap().
+#[test]
+fn refcell_multiple_borrow_mut_fail() {
+    let rc = RefCell::new(42);
+    let _bm1 = rc.borrow_mut().unwrap();
+    let _bm2 = rc.borrow_mut().unwrap(); // This will panic if unwrapped.
+}
+*/
 
-    /*
-    // FAILING TEST: borrow_mut() while borrow() is active.
-    // This will return None, failing the unwrap().
-    #[test]
-    fn refcell_borrow_mut_while_shared_fail() {
-        let rc = RefCell::new(42);
-        let _b1 = rc.borrow().unwrap();
-        let _bm1 = rc.borrow_mut().unwrap(); // This will panic if unwrapped.
-    }
-    */
+/*
+// FAILING TEST: borrow_mut() while borrow() is active.
+// This will return None, failing the unwrap().
+#[test]
+fn refcell_borrow_mut_while_shared_fail() {
+    let rc = RefCell::new(42);
+    let _b1 = rc.borrow().unwrap();
+    let _bm1 = rc.borrow_mut().unwrap(); // This will panic if unwrapped.
+}
+*/
+
+// example :
+
+// fn main() {
+//     // 1. Create RefCell
+//     let rc = RefCell::new(42);
+
+//     // 2. Immutable borrows (multiple allowed)
+//     let b1 = rc.borrow().unwrap();
+//     let b2 = rc.borrow().unwrap();
+
+//     println!("b1 = {}, b2 = {}", *b1, *b2);
+
+//     // Cannot mutably borrow while shared borrows exist
+//     if rc.borrow_mut().is_none() {
+//         println!("Cannot borrow_mut while shared borrows exist");
+//     }
+
+//     // Drop shared borrows
+//     drop(b1);
+//     drop(b2);
+
+//     // 3. Mutable borrow (exclusive)
+//     {
+//         let mut bm = rc.borrow_mut().unwrap();
+//         *bm += 1;
+//         println!("Mutated value = {}", *bm);
+
+//         // Cannot borrow again while mutable borrow is active
+//         if rc.borrow().is_none() {
+//             println!("Cannot borrow while mutable borrow exists");
+//         }
+//     } // <-- bm dropped here, state resets
+
+//     // 4. Borrow again after mutable borrow is dropped
+//     let b3 = rc.borrow().unwrap();
+//     println!("Final value = {}", *b3);
+
+//     // --------------------------------------------------
+//     // 5. Real-world style usage
+//     #[derive(Debug)]
+//     struct Counter {
+//         value: RefCell<i32>,
+//     }
+
+//     impl Counter {
+//         fn new(v: i32) -> Self {
+//             Self {
+//                 value: RefCell::new(v),
+//             }
+//         }
+
+//         fn increment(&self) {
+//             *self.value.borrow_mut().unwrap() += 1;
+//         }
+
+//         fn get(&self) -> i32 {
+//             *self.value.borrow().unwrap()
+//         }
+//     }
+
+//     let counter = Counter::new(10);
+
+//     counter.increment();
+//     counter.increment();
+
+//     println!("Counter value = {}", counter.get());
+
+//     // --------------------------------------------------
+//     // 6. Demonstrating runtime borrow rules clearly
+
+//     let data = RefCell::new(100);
+
+//     let r1 = data.borrow().unwrap();
+//     println!("r1 = {}", *r1);
+
+//     // This will fail (returns None)
+//     if data.borrow_mut().is_none() {
+//         println!("Runtime check: cannot mutably borrow while shared exists");
+//     }
+
+//     drop(r1);
+
+//     let mut r2 = data.borrow_mut().unwrap();
+//     *r2 += 50;
+//     println!("r2 after mutation = {}", *r2);
+
+//     // This will fail (returns None)
+//     if data.borrow().is_none() {
+//         println!("Runtime check: cannot borrow while mutable exists");
+//     }
+
+//     drop(r2);
+
+//     let r3 = data.borrow().unwrap();
+//     println!("r3 final = {}", *r3);
+
+//     println!("Program completed successfully");
+// }
