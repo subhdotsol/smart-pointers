@@ -89,3 +89,89 @@ mod tests {
         drop(rc2);
     }
 }
+
+// Example :
+// fn main() {
+//     // 1. Create a new Rc
+//     let mut a = Rc::new(10);
+//     println!("Initial value: {}", *a);
+
+//     // 2. Clone it (increase refcount)
+//     let b = a.clone();
+//     let c = b.clone();
+
+//     println!("After cloning:");
+//     println!("a = {}, b = {}, c = {}", *a, *b, *c);
+
+//     // 3. Check reference count
+//     println!("Refcount = {}", Rc::strong_count(&a));
+
+//     // 4. Try mutable access (should fail because count > 1)
+//     if let Some(val) = Rc::get_mut(&mut a) {
+//         *val = 20;
+//     } else {
+//         println!("Cannot mutate: multiple owners exist");
+//     }
+
+//     // 5. Drop clones
+//     drop(b);
+//     drop(c);
+
+//     println!("After dropping b and c:");
+//     println!("Refcount = {}", Rc::strong_count(&a));
+
+//     // 6. Now mutation should work
+//     if let Some(val) = Rc::get_mut(&mut a) {
+//         *val = 30;
+//         println!("Mutated value: {}", *a);
+//     }
+
+//     // 7. Try to unwrap (take ownership)
+//     match Rc::try_unwrap(a) {
+//         Ok(value) => {
+//             println!("Successfully unwrapped Rc, value = {}", value);
+//         }
+//         Err(_) => {
+//             println!("Failed to unwrap Rc (multiple owners exist)");
+//         }
+//     }
+
+//     // --------------------------------------------------
+//     // 8. Real use-case: shared data in a structure
+//     #[derive(Debug)]
+//     struct Node {
+//         value: i32,
+//         next: Option<Rc<Node>>,
+//     }
+
+//     let n1 = Rc::new(Node { value: 1, next: None });
+//     let n2 = Rc::new(Node {
+//         value: 2,
+//         next: Some(n1.clone()),
+//     });
+
+//     println!("n1 value = {}", n1.value);
+//     println!("n2 value = {}", n2.value);
+
+//     println!(
+//         "n1 refcount after sharing = {}",
+//         Rc::strong_count(&n1)
+//     );
+
+//     // 9. Demonstrating drop behavior
+//     {
+//         let temp = n1.clone();
+//         println!(
+//             "n1 refcount inside scope = {}",
+//             Rc::strong_count(&n1)
+//         );
+//         drop(temp);
+//     }
+
+//     println!(
+//         "n1 refcount after scope = {}",
+//         Rc::strong_count(&n1)
+//     );
+
+//     println!("Program completed without leaks (no cycles created)");
+// }
